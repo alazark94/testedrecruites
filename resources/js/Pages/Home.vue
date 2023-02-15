@@ -1,4 +1,5 @@
 <template>
+    <Head title="Home"/>
     <div>
         <div class="container mx-auto">
             <div class="flex justify-center">
@@ -88,7 +89,7 @@
 <script setup>
 import { Inertia } from "@inertiajs/inertia";
 import Table from "../Components/Table.vue";
-import { Link, useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/inertia-vue3";
 
 let props = defineProps({
     "products": Array

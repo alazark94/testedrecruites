@@ -1,4 +1,5 @@
 <template>
+        <Head title="Edit Product"/>
         <div class="space-y-5">
             <h2 class="font-bold text-xl text-gray-800 leading-tight">
                 Edit Product
