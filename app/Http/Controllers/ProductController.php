@@ -6,23 +6,18 @@ use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(): \Inertia\Response
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): Response
-    {
-        //
+        return Inertia::render('Home', [
+            'products' => Product::orderBy('created_at', 'desc')->get()
+        ]);
     }
 
     /**
@@ -30,23 +25,25 @@ class ProductController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
-    }
+        $validated = $request->validate([
+            'name' => ['required'],
+            'quantity' => ['required', 'integer'],
+            'price' => ['required', 'numeric']
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product): Response
-    {
-        //
+        Product::create($validated);
+
+        return redirect()->back();
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product): Response
+    public function edit(Product $product): \Inertia\Response
     {
-        //
+        return Inertia::render('EditProduct', [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -54,7 +51,15 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required_without:price,quantity',
+            'price' => ['required_without:name,quantity', 'numeric'],
+            'quantity' => ['required_without:name,price', 'integer']
+        ]);
+
+        $product->update($validated);
+
+        return redirect('/');
     }
 
     /**
@@ -62,6 +67,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
-        //
+        $product->delete();
+
+        return redirect()->back();
     }
 }
