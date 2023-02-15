@@ -6,6 +6,7 @@
                 <th scope="col" class="px-6 py-3">Quantity</th>
                 <th scope="col" class="px-6 py-3">Unit Price</th>
                 <th scope="col" class="px-6 py-3">Total Value</th>
+                <th scope="col" class="px-6 py-3">Date Submitted</th>
                 <th scope="col" class="px-6 py-3">Actions</th>
             </tr>
         </thead>
@@ -18,8 +19,9 @@
                     {{ product.name }}
                 </th>
                 <td class="px-6 py-4">{{ product.quantity }}</td>
-                <td class="px-6 py-4">{{ product.price }}</td>
-                <td class="px-6 py-4">{{ product.price * product.quantity }}</td>
+                <td class="px-6 py-4">{{ new Intl.NumberFormat().format(product.price)}}</td>
+                <td class="px-6 py-4">{{ new Intl.NumberFormat().format(product.price * product.quantity) }}</td>
+                <td class="px-6 py-4">{{ product.created_at }}</td>
                 <td class="px-6 py-4">
                     <div class="flex">
                         <button
@@ -39,12 +41,31 @@
                     </div>
                 </td>
             </tr>
+            <tr>
+                <th
+                    scope="row"
+                    class="px-6 py-4 font-Bold text-3xl text-gray-900 whitespace-nowrap"
+                >
+                    Total
+                </th>
+                <td class="px-6 py-4 font-medium text-3xl">
+                    {{ new Intl.NumberFormat().format(totalPrice) }}
+                </td>
+            </tr>
         </tbody>
     </table>
 </template>
 <script setup>
 let props = defineProps({
     products: Array,
+});
+
+let totalPrice = 0;
+
+props.products.forEach(product => {
+    const totalValue = product.quantity * product.price;
+
+    totalPrice+=totalValue
 });
 </script>
 <style></style>
